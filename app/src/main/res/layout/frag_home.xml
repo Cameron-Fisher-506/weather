@@ -10,9 +10,265 @@
         android:id="@+id/imgWeather"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:src="@drawable/forest_sunny"
         android:scaleType="centerCrop"
+        android:src="@drawable/forest_sunny"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtTemperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:text="@string/na"
+        android:textColor="@color/white"
+        android:textSize="60dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/na"
+        android:textColor="@color/white"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtTemperature" />
+
+    <View
+        android:id="@+id/horizontalDividerAppBar"
+        style="@style/CommonHorizontalDivider"
+        android:layout_marginTop="50dp"
+        android:paddingTop="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgWeather" />
+
+    <TextView
+        android:id="@+id/txtMinTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/na"
+        android:layout_marginStart="20dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/horizontalDividerAppBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imgWeather"
+        app:layout_constraintVertical_bias="0.109" />
+
+    <TextView
+        android:id="@+id/txtMin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/min"
+        android:layout_marginStart="20dp"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@id/horizontalDividerAppBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imgWeather"
+        app:layout_constraintVertical_bias="0.709" />
+
+    <TextView
+        android:id="@+id/txtCurrentTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/na"
+        android:layout_marginStart="15dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/horizontalDividerAppBar"
+        app:layout_constraintStart_toEndOf="@id/txtMin"
+        app:layout_constraintEnd_toStartOf="@id/txtMax"
+        app:layout_constraintTop_toBottomOf="@id/imgWeather"
+        app:layout_constraintVertical_bias="0.109" />
+
+    <TextView
+        android:id="@+id/txtCurrent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/current"
+        android:layout_marginStart="15dp"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@id/horizontalDividerAppBar"
+        app:layout_constraintStart_toEndOf="@id/txtMin"
+        app:layout_constraintEnd_toStartOf="@id/txtMax"
+        app:layout_constraintTop_toBottomOf="@id/imgWeather"
+        app:layout_constraintVertical_bias="0.709" />
+
+    <TextView
+        android:id="@+id/txtMaxTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/na"
+        android:layout_marginEnd="20dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/horizontalDividerAppBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imgWeather"
+        app:layout_constraintVertical_bias="0.109" />
+
+    <TextView
+        android:id="@+id/txtMax"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/max"
+        android:layout_marginEnd="20dp"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@id/horizontalDividerAppBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imgWeather"
+        app:layout_constraintVertical_bias="0.709" />
+
+    <TextView
+        android:id="@+id/txtDayOne"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/monday"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/horizontalDividerAppBar"
+        app:layout_constraintStart_toStartOf="parent"
+         />
+
+    <ImageView
+        android:id="@+id/imgDayOneTemp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="130dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/partlysunny"
+        app:layout_constraintEnd_toStartOf="@+id/txtDayOneTemp"
+        app:layout_constraintTop_toBottomOf="@id/horizontalDividerAppBar"
+        tools:srcCompat="@tools:sample/avatars[0]" />
+
+    <TextView
+        android:id="@+id/txtDayOneTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/na"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="30dp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/horizontalDividerAppBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/txtDayTwo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tuesday"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/txtDayOne"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <ImageView
+        android:id="@+id/imgDayTwoTemp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="130dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/partlysunny"
+        app:layout_constraintEnd_toStartOf="@+id/txtDayTwoTemp"
+        app:layout_constraintTop_toBottomOf="@id/imgDayOneTemp"
+        tools:srcCompat="@tools:sample/avatars[0]" />
+
+    <TextView
+        android:id="@+id/txtDayTwoTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/na"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="30dp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/txtDayOneTemp"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/txtDayThree"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/wednesday"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/txtDayTwo"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <ImageView
+        android:id="@+id/imgDayThreeTemp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="130dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/partlysunny"
+        app:layout_constraintEnd_toStartOf="@+id/txtDayThreeTemp"
+        app:layout_constraintTop_toBottomOf="@id/imgDayTwoTemp"
+        tools:srcCompat="@tools:sample/avatars[0]" />
+
+    <TextView
+        android:id="@+id/txtDayThreeTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/na"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="30dp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/txtDayTwoTemp"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/txtDayFour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/thursday"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/txtDayThree"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <ImageView
+        android:id="@+id/imgDayFourTemp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="130dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/partlysunny"
+        app:layout_constraintEnd_toStartOf="@+id/txtDayFourTemp"
+        app:layout_constraintTop_toBottomOf="@id/imgDayThreeTemp"
+        tools:srcCompat="@tools:sample/avatars[0]" />
+
+    <TextView
+        android:id="@+id/txtDayFourTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/na"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="30dp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/txtDayThreeTemp"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

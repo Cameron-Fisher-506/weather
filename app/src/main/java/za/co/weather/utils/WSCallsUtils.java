@@ -294,22 +294,4 @@ public class WSCallsUtils extends AsyncTask<String, Void, String>
         return toReturn;
     }
 
-    /*private static String getUrl(String key)
-    {
-        String toReturn = key;
-
-        urlMap = new HashMap<>();
-        //urlMap.put(StringUtils.SERVER_URL + "/rest/truckDriver/validDriverLogin", "http://www.mocky.io/v2/5eb3d24a3200007c477b8b51");
-        //urlMap.put(StringUtils.SERVER_URL + "/rest/mobile/currentJobv2/184", "http://www.mocky.io/v2/5ed4c5343300005f00f7a3da");
-        //urlMap.put(StringUtils.SERVER_URL + "/rest/validationService/getJobValidations/918550", "http://www.mocky.io/v2/5eb975d72f00005f523c31c9");
-
-        if(urlMap.containsKey(key))
-        {
-            toReturn = urlMap.get(key);
-        }
-
-        return toReturn;
-    }*/
-
-
 }
