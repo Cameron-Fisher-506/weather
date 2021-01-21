@@ -47,8 +47,16 @@ public class LocationFrag extends Fragment implements OnMapReadyCallback, Locati
     }
 
     @Override
-    public void onDestroyView() {
+    public void onDestroyView()
+    {
         super.onDestroyView();
+
+        if(this.locationManager != null)
+        {
+            this.locationManager.removeUpdates(this);
+            this.locationManager = null;
+        }
+
     }
 
     private void wireUI(View view)
@@ -136,4 +144,5 @@ public class LocationFrag extends Fragment implements OnMapReadyCallback, Locati
     public void onProviderDisabled(String provider) {
 
     }
+
 }

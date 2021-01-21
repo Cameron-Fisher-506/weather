@@ -20,4 +20,7 @@ public class ConstantUtils
 
     //Weather
     public static final int FORECAST_DAYS = 5;
+
+    //HEX Symbols
+    public static final char DEGREES_SYMBOL = 0x00B0;
 }

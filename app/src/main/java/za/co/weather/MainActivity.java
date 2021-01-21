@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -197,11 +198,16 @@ public class MainActivity extends AppCompatActivity implements WSCallsUtilsTaskC
 
     @Override
     public Activity getActivity() {
-        return null;
+        return this;
     }
 
     @Override
-    public void taskCompleted(String response, int reqCode) {
+    public Context getCallingContext() {
+        return this;
+    }
+
+    @Override
+    public void taskCompleted(String response, int reqCode, boolean isOffline) {
         if(response != null)
         {
 

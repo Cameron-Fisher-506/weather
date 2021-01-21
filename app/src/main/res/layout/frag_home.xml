@@ -7,6 +7,16 @@
     android:layout_height="match_parent"
     android:background="@color/sunny">
 
+    <include
+        android:id="@+id/notify"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/notification_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
 
     <ImageView
         android:id="@+id/imgWeather"
@@ -17,7 +27,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/notify" />
 
     <TextView
         android:id="@+id/txtTemperature"
@@ -139,7 +149,7 @@
         android:layout_height="wrap_content"
         android:text="@string/monday"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/horizontalDividerAppBar"
         app:layout_constraintStart_toStartOf="parent"
@@ -149,10 +159,10 @@
         android:id="@+id/imgDayOneTemp"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginEnd="130dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:src="@drawable/partlysunny"
-        app:layout_constraintEnd_toStartOf="@+id/txtDayOneTemp"
+        app:layout_constraintStart_toStartOf="@+id/txtDayOne"
+        app:layout_constraintEnd_toEndOf="@+id/txtDayOneTemp"
         app:layout_constraintTop_toBottomOf="@id/horizontalDividerAppBar"
         tools:srcCompat="@tools:sample/avatars[0]" />
 
@@ -162,7 +172,7 @@
         android:layout_height="wrap_content"
         android:text="@string/na"
         android:layout_marginEnd="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/horizontalDividerAppBar"
         app:layout_constraintEnd_toEndOf="parent"
@@ -174,7 +184,7 @@
         android:layout_height="wrap_content"
         android:text="@string/tuesday"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/txtDayOne"
         app:layout_constraintStart_toStartOf="parent"
@@ -184,10 +194,10 @@
         android:id="@+id/imgDayTwoTemp"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginEnd="130dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:src="@drawable/partlysunny"
-        app:layout_constraintEnd_toStartOf="@+id/txtDayTwoTemp"
+        app:layout_constraintStart_toStartOf="@+id/txtDayTwo"
+        app:layout_constraintEnd_toEndOf="@+id/txtDayTwoTemp"
         app:layout_constraintTop_toBottomOf="@id/imgDayOneTemp"
         tools:srcCompat="@tools:sample/avatars[0]" />
 
@@ -197,7 +207,7 @@
         android:layout_height="wrap_content"
         android:text="@string/na"
         android:layout_marginEnd="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/txtDayOneTemp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -209,7 +219,7 @@
         android:layout_height="wrap_content"
         android:text="@string/wednesday"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/txtDayTwo"
         app:layout_constraintStart_toStartOf="parent"
@@ -219,10 +229,10 @@
         android:id="@+id/imgDayThreeTemp"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginEnd="130dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:src="@drawable/partlysunny"
-        app:layout_constraintEnd_toStartOf="@+id/txtDayThreeTemp"
+        app:layout_constraintStart_toStartOf="@+id/txtDayThree"
+        app:layout_constraintEnd_toEndOf="@+id/txtDayThreeTemp"
         app:layout_constraintTop_toBottomOf="@id/imgDayTwoTemp"
         tools:srcCompat="@tools:sample/avatars[0]" />
 
@@ -232,7 +242,7 @@
         android:layout_height="wrap_content"
         android:text="@string/na"
         android:layout_marginEnd="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/txtDayTwoTemp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -244,7 +254,7 @@
         android:layout_height="wrap_content"
         android:text="@string/thursday"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/txtDayThree"
         app:layout_constraintStart_toStartOf="parent"
@@ -254,10 +264,10 @@
         android:id="@+id/imgDayFourTemp"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginEnd="130dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:src="@drawable/partlysunny"
-        app:layout_constraintEnd_toStartOf="@+id/txtDayFourTemp"
+        app:layout_constraintStart_toStartOf="@+id/txtDayFour"
+        app:layout_constraintEnd_toEndOf="@+id/txtDayFourTemp"
         app:layout_constraintTop_toBottomOf="@id/imgDayThreeTemp"
         tools:srcCompat="@tools:sample/avatars[0]" />
 
@@ -267,9 +277,45 @@
         android:layout_height="wrap_content"
         android:text="@string/na"
         android:layout_marginEnd="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/txtDayThreeTemp"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+
+    <TextView
+        android:id="@+id/txtDayFive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/friday"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/txtDayFour"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <ImageView
+        android:id="@+id/imgDayFiveTemp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/partlysunny"
+        app:layout_constraintStart_toStartOf="@+id/txtDayFive"
+        app:layout_constraintEnd_toEndOf="@+id/txtDayFiveTemp"
+        app:layout_constraintTop_toBottomOf="@id/imgDayFourTemp"
+        tools:srcCompat="@tools:sample/avatars[0]" />
+
+    <TextView
+        android:id="@+id/txtDayFiveTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/na"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/txtDayFourTemp"
         app:layout_constraintEnd_toEndOf="parent"
         />
 

@@ -78,12 +78,21 @@ public class LocationUtils {
     {
         try
         {
-            locationManager.requestLocationUpdates(provider, 1, 5, locationListener);
+            locationManager.requestLocationUpdates(provider, 0, 5, locationListener);
         } catch (SecurityException e)
         {
             Log.e(TAG, "Error: " + e.getMessage() +
                     "\nMethod: LocationUtils - startLocationManager" +
                     "\nCreatedTime: " + DTUtils.getCurrentDateTime());
+        }
+    }
+
+    public void stopLocationUpdates()
+    {
+        if(this.locationManager != null && this.locationListener != null)
+        {
+            this.locationManager.removeUpdates(this.locationListener);
+            this.locationManager = null;
         }
     }
 

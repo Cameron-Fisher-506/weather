@@ -11,6 +11,7 @@
 
     //Random
     <string name="na">N/A</string>
+    <string name="notification">notification</string>
 
     //Days
     <string name="monday">Monday</string>

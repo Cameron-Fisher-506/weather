@@ -1,5 +1,6 @@
 package za.co.weather.nav;
 
+import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -59,7 +60,16 @@ public class HomeFrag extends Fragment implements WSCallsUtilsTaskCaller, Locati
     private ImageView imgDayFourTemp;
     private TextView txtDayFourTemp;
 
+    private TextView txtDayFive;
+    private ImageView imgDayFiveTemp;
+    private TextView txtDayFiveTemp;
+
+    private TextView txtNotify;
+
     private Position position;
+
+    private LocationUtils locationUtilsGPS;
+
 
     @Nullable
     @Override
@@ -68,16 +78,20 @@ public class HomeFrag extends Fragment implements WSCallsUtilsTaskCaller, Locati
 
         this.position = new Position();
 
-        LocationUtils locationUtilsGPS = new LocationUtils(this, LocationManager.GPS_PROVIDER);
+        this.locationUtilsGPS = new LocationUtils(this, LocationManager.GPS_PROVIDER);
 
         wireUI(view);
 
         return view;
     }
 
+
     private void wireUI(View view)
     {
         this.homeFragLayout = (ConstraintLayout) view.findViewById(R.id.homeFrag);
+
+        this.txtNotify = (TextView) view.findViewById(R.id.txtNotify);
+        this.txtNotify.setVisibility(View.GONE);
 
         this.imgWeather = (ImageView) view.findViewById(R.id.imgWeather);
 
@@ -103,6 +117,10 @@ public class HomeFrag extends Fragment implements WSCallsUtilsTaskCaller, Locati
         this.txtDayFour = (TextView) view.findViewById(R.id.txtDayFour);
         this.imgDayFourTemp = (ImageView) view.findViewById(R.id.imgDayFourTemp);
         this.txtDayFourTemp = (TextView) view.findViewById(R.id.txtDayFourTemp);
+
+        this.txtDayFive = (TextView) view.findViewById(R.id.txtDayFive);
+        this.imgDayFiveTemp = (ImageView) view.findViewById(R.id.imgDayFiveTemp);
+        this.txtDayFiveTemp = (TextView) view.findViewById(R.id.txtDayFiveTemp);
     }
 
     private void displayUI(Position position)
@@ -113,8 +131,8 @@ public class HomeFrag extends Fragment implements WSCallsUtilsTaskCaller, Locati
             {
                 if(position.getWeather().getTemp() != null)
                 {
-                    this.txtTemperature.setText(position.getWeather().getTemp() + "" + (char)0x00B0);
-                    this.txtCurrentTemp.setText(position.getWeather().getTemp() + "" + (char)0x00B0);
+                    this.txtTemperature.setText(position.getWeather().getTemp() + "" + ConstantUtils.DEGREES_SYMBOL);
+                    this.txtCurrentTemp.setText(position.getWeather().getTemp() + "" + ConstantUtils.DEGREES_SYMBOL);
                 }else
                 {
                     this.txtTemperature.setText("N/A");
@@ -122,18 +140,21 @@ public class HomeFrag extends Fragment implements WSCallsUtilsTaskCaller, Locati
 
                 if(position.getWeather().getMain() != null)
                 {
-                    if(position.getWeather().getMain().equals(Weather.CLEAR))
+                    if(getContext() != null)
                     {
-                        this.imgWeather.setImageResource(R.drawable.forest_sunny);
-                        this.homeFragLayout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.sunny));
-                    }else if(position.getWeather().getMain().equals(Weather.RAIN))
-                    {
-                        this.imgWeather.setImageResource(R.drawable.forest_rainy);
-                        this.homeFragLayout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.rainy));
-                    }else if(position.getWeather().getMain().equals(Weather.CLOUDS))
-                    {
-                        this.imgWeather.setImageResource(R.drawable.forest_cloudy);
-                        this.homeFragLayout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.cloudy));
+                        if(position.getWeather().getMain().equals(Weather.CLEAR))
+                        {
+                            this.imgWeather.setImageResource(R.drawable.forest_sunny);
+                            this.homeFragLayout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.sunny));
+                        }else if(position.getWeather().getMain().equals(Weather.RAIN))
+                        {
+                            this.imgWeather.setImageResource(R.drawable.forest_rainy);
+                            this.homeFragLayout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.rainy));
+                        }else if(position.getWeather().getMain().equals(Weather.CLOUDS))
+                        {
+                            this.imgWeather.setImageResource(R.drawable.forest_cloudy);
+                            this.homeFragLayout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.cloudy));
+                        }
                     }
                 }
 
@@ -147,7 +168,7 @@ public class HomeFrag extends Fragment implements WSCallsUtilsTaskCaller, Locati
 
                 if(position.getWeather().getMinTemp() != null)
                 {
-                    this.txtMinTemp.setText(position.getWeather().getMinTemp() + "" + (char)0x00B0);
+                    this.txtMinTemp.setText(position.getWeather().getMinTemp() + "" + ConstantUtils.DEGREES_SYMBOL);
                 }else
                 {
                     this.txtMinTemp.setText("N/A");
@@ -155,7 +176,7 @@ public class HomeFrag extends Fragment implements WSCallsUtilsTaskCaller, Locati
 
                 if(position.getWeather().getMaxTemp() != null)
                 {
-                    this.txtMaxTemp.setText(position.getWeather().getMaxTemp() + "" + (char)0x00B0);
+                    this.txtMaxTemp.setText(position.getWeather().getMaxTemp() + "" + ConstantUtils.DEGREES_SYMBOL);
                 }else
                 {
                     this.txtMaxTemp.setText("N/A");
@@ -175,25 +196,31 @@ public class HomeFrag extends Fragment implements WSCallsUtilsTaskCaller, Locati
                         //day one
                         this.txtDayOne.setText(day);
                         setWeatherImage(weather.getMain(), this.imgDayOneTemp);
-                        this.txtDayOneTemp.setText(weather.getMaxTemp() + "" + (char)0x00B0);
+                        this.txtDayOneTemp.setText(weather.getMaxTemp() + "" + ConstantUtils.DEGREES_SYMBOL);
                     }else if(i == 1)
                     {
                         //day two
                         this.txtDayTwo.setText(day);
                         setWeatherImage(weather.getMain(), this.imgDayTwoTemp);
-                        this.txtDayTwoTemp.setText(weather.getMaxTemp() + "" + (char)0x00B0);
+                        this.txtDayTwoTemp.setText(weather.getMaxTemp() + "" + ConstantUtils.DEGREES_SYMBOL);
                     }else if(i == 2)
                     {
                         //day three
                         this.txtDayThree.setText(day);
                         setWeatherImage(weather.getMain(), this.imgDayThreeTemp);
-                        this.txtDayThreeTemp.setText(weather.getMaxTemp() + "" + (char)0x00B0);
+                        this.txtDayThreeTemp.setText(weather.getMaxTemp() + "" + ConstantUtils.DEGREES_SYMBOL);
                     }else if(i == 3)
                     {
                         //day four
                         this.txtDayFour.setText(day);
                         setWeatherImage(weather.getMain(), this.imgDayFourTemp);
-                        this.txtDayFourTemp.setText(weather.getMaxTemp() + "" + (char)0x00B0);
+                        this.txtDayFourTemp.setText(weather.getMaxTemp() + "" + ConstantUtils.DEGREES_SYMBOL);
+                    }else if(i == 4)
+                    {
+                        //day five
+                        this.txtDayFive.setText(day);
+                        setWeatherImage(weather.getMain(), this.imgDayFiveTemp);
+                        this.txtDayFiveTemp.setText(weather.getMaxTemp() + "" + ConstantUtils.DEGREES_SYMBOL);
                     }
                 }
             }
@@ -224,8 +251,22 @@ public class HomeFrag extends Fragment implements WSCallsUtilsTaskCaller, Locati
     }
 
     @Override
-    public void taskCompleted(String response, int reqCode)
+    public Context getCallingContext() {
+        return getContext();
+    }
+
+    @Override
+    public void taskCompleted(String response, int reqCode, boolean isOffline)
     {
+        if(isOffline)
+        {
+            this.txtNotify.setText("You are currently in cache mode.");
+            this.txtNotify.setVisibility(View.VISIBLE);
+        }else
+        {
+            this.txtNotify.setVisibility(View.GONE);
+        }
+
         if(response != null)
         {
             if(reqCode == REQ_CODE_GET_WEATHER)

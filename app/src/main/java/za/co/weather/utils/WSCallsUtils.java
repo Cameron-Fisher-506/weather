@@ -2,7 +2,7 @@ package za.co.weather.utils;
 
 import android.os.AsyncTask;
 import android.util.Log;
-
+import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -12,10 +12,8 @@ import java.net.URL;
 public class WSCallsUtils extends AsyncTask<String, Void, String>
 {
     private WSCallsUtilsTaskCaller wsCallsUtilsTaskCaller;
-    private String dialogText;
 
     private int reqCode;
-    //private static HashMap<String, String> urlMap;
 
     private WSCallsUtils(WSCallsUtilsTaskCaller wsCallsUtilsTaskCaller, int reqCode)
     {
@@ -35,8 +33,6 @@ public class WSCallsUtils extends AsyncTask<String, Void, String>
     {
         try
         {
-            //url = getUrl(url);
-
             WSCallsUtils wsCallsUtils = new WSCallsUtils(wsCallsUtilsTaskCaller, reqCode);
             wsCallsUtils.execute(ConstantUtils.REQUEST_METHOD_GET, url);
         }catch(Exception e)
@@ -48,12 +44,18 @@ public class WSCallsUtils extends AsyncTask<String, Void, String>
         }
     }
 
+    /**
+     * post is used to make POST Requests
+     *
+     * @param wsCallsUtilsTaskCaller Context which implements the callback method
+     * @param url URL request is made to
+     * @param body JSON to POST
+     * @param reqCode Request code used to handled the request in the callback method
+     */
     public static void post(WSCallsUtilsTaskCaller wsCallsUtilsTaskCaller, String url, String body, int reqCode)
     {
         try
         {
-            //url = getUrl(url);
-
             WSCallsUtils wsCallsUtils = new WSCallsUtils(wsCallsUtilsTaskCaller, reqCode);
             wsCallsUtils.execute(ConstantUtils.REQUEST_METHOD_POST, url, body);
         }catch(Exception e)
@@ -75,97 +77,115 @@ public class WSCallsUtils extends AsyncTask<String, Void, String>
     @Override
     protected String doInBackground(String... strings) {
 
-        //JSONObject toReturn = null;
-        String toReturn = null;
+        JSONObject toReturn = null;
 
-        String requestMethod = strings[0];
-        String url = strings[1];
+
         try
         {
-            if(requestMethod.equals(ConstantUtils.REQUEST_METHOD_GET))
+            if(strings != null && strings.length > 0)
             {
-                //GET
-                toReturn = genericGET(url);
-                //toReturn = new JSONObject();
-                //String response = genericGET(url);
+                String requestMethod = strings[0];
 
-                /*toReturn.put("url", url);
-                toReturn.put("response", response);*/
-            }else if(requestMethod.equals(ConstantUtils.REQUEST_METHOD_POST))
+                if(requestMethod.equals(ConstantUtils.REQUEST_METHOD_GET))
+                {
+                    if(strings.length > 1)
+                    {
+                        //GET
+                        toReturn = new JSONObject();
+                        String url = strings[1];
+                        String response = genericGET(url);
+
+                        toReturn.put("url", url);
+                        toReturn.put("response", response);
+                    }
+
+                }else if(requestMethod.equals(ConstantUtils.REQUEST_METHOD_POST))
+                {
+                    if(strings.length > 2)
+                    {
+                        String url = strings[1];
+                        //POST
+                        String body = strings[2];
+
+                        toReturn = new JSONObject();
+                        String response = genericPOST(url, body);
+
+                        toReturn.put("url", url);
+                        toReturn.put("body", body);
+                        toReturn.put("response", response);
+                    }
+                }
+            }else
             {
-                //POST
-                String body = strings[2];
-
-                toReturn = genericPOST(url, body);
-                /*toReturn = new JSONObject();
-                String response = genericPOST(url, body);
-
-                toReturn.put("url", url);
-                toReturn.put("body", body);
-                toReturn.put("response", response);*/
 
             }
+
         }catch(Exception e)
         {
             Log.e(ConstantUtils.TAG, "\nError: " + e.getMessage()
                     + "\nMethod: WSCallsUtils - doInBackground"
-                    + "\nURL: " + url
-                    + "\nBody: " + strings[1]
                     + "\nCreatedTime: " + DTUtils.getCurrentDateTime());
         }finally
         {
 
         }
 
-        /*if(toReturn != null)
+        if(toReturn != null)
         {
             return toReturn.toString();
-        }*/
+        }
 
-        return toReturn;
+        return null;
     }
 
 
     @Override
-    protected void onPostExecute(String body)
+    protected void onPostExecute(String s)
     {
-
-        this.wsCallsUtilsTaskCaller.taskCompleted(body, this.reqCode);
-        /*try
+        try
         {
-            SQLiteUtils sqLiteUtils = new SQLiteUtils(this.wsCallsUtilsTaskCaller.getActivity());
+            SQLiteUtils sqLiteUtils = new SQLiteUtils(this.wsCallsUtilsTaskCaller.getCallingContext());
 
             String url = null;
             String response = null;
+            boolean isOffline = false;
 
-            JSONObject jsonObject = new JSONObject(body);
-
-            if(jsonObject != null)
+            if(s != null && !s.equals(""))
             {
+                JSONObject jsonObject = new JSONObject(s);
+                url = jsonObject.getString("url");
+
                 if(jsonObject.has("response"))
                 {
                     //cache the response
-                    url = jsonObject.getString("url");
+                    isOffline = false;
                     response = jsonObject.getString("response");
-                    sqLiteUtils.cacheResponse(url, response, GeneralUtils.getCurrentDateTime());
+
+                    sqLiteUtils.cacheResponse(url, response, DTUtils.getCurrentDateTime());
 
                 }else
                 {
-                    //get from cache
+                    isOffline = true;
                     url = jsonObject.getString("url");
+
+                    //get from cache
                     response = sqLiteUtils.getResponse(url);
                 }
+            }else
+            {
+                //What happens if s is null
+                isOffline = true;
             }
 
-            this.wsCallsUtilsTaskCaller.taskCompleted(response, this.reqCode);
+            this.wsCallsUtilsTaskCaller.taskCompleted(response, this.reqCode, isOffline);
 
         }catch(Exception e)
         {
-            Log.e(ConstantUtils.TMSX, "\nError: " + e.getMessage()
-                    + "\nMethod: WSCallsUtils - doInBackground"
-                    + "\nbody: " + body
-                    + "\nCreatedTime: " + GeneralUtils.getCurrentDateTime());
-        }*/
+            Log.e(ConstantUtils.TAG, "\nError: " + e.getMessage()
+                    + "\nMethod: WSCallsUtils - onPostExecute"
+                    + "\nbody: " + s
+                    + "\nCreatedTime: " + DTUtils.getCurrentDateTime());
+        }
 
     }
 
