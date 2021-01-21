@@ -22,8 +22,6 @@ public class LocationUtils {
 
     private LocationListener locationListener;
 
-    private Location currentLocation;
-
     private Context context;
 
     private LocationUtilsCaller locationUtilsCaller;
@@ -45,11 +43,6 @@ public class LocationUtils {
             startLocationManager(provider);
 
         }
-    }
-
-    public Location getCurrentLocation()
-    {
-        return currentLocation;
     }
 
     private void initializeLocationServices() {
@@ -85,7 +78,7 @@ public class LocationUtils {
     {
         try
         {
-            locationManager.requestLocationUpdates(provider, 0, 5, locationListener);
+            locationManager.requestLocationUpdates(provider, 1, 5, locationListener);
         } catch (SecurityException e)
         {
             Log.e(TAG, "Error: " + e.getMessage() +
@@ -139,18 +132,6 @@ public class LocationUtils {
             Log.e(TAG, "Error: " + e.getMessage() +
                     "\nMethod: LocationUtils - getAddress" +
                     "\nCreatedTime: " + DTUtils.getCurrentDateTime());
-        }
-
-        return toReturn;
-    }
-
-    public static Double msToKmh(Double ms)
-    {
-        Double toReturn = null;
-
-        if(ms != null)
-        {
-           toReturn = MathUtils.precision(ms * 3.6);
         }
 
         return toReturn;

@@ -11,13 +11,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import za.co.weather.R;
 import za.co.weather.objs.Position;
 import za.co.weather.objs.Weather;
@@ -33,6 +31,10 @@ public class HomeFrag extends Fragment implements WSCallsUtilsTaskCaller, Locati
 {
     private final int REQ_CODE_GET_WEATHER = 100;
     private final int REQ_CODE_GET_WEATHER_FORECAST = 101;
+
+    private ConstraintLayout homeFragLayout;
+
+    private ImageView imgWeather;
 
     private TextView txtTemperature;
     private TextView txtDescription;
@@ -75,6 +77,10 @@ public class HomeFrag extends Fragment implements WSCallsUtilsTaskCaller, Locati
 
     private void wireUI(View view)
     {
+        this.homeFragLayout = (ConstraintLayout) view.findViewById(R.id.homeFrag);
+
+        this.imgWeather = (ImageView) view.findViewById(R.id.imgWeather);
+
         this.txtTemperature = (TextView) view.findViewById(R.id.txtTemperature);
         this.txtDescription = (TextView) view.findViewById(R.id.txtDescription);
 
@@ -114,6 +120,23 @@ public class HomeFrag extends Fragment implements WSCallsUtilsTaskCaller, Locati
                     this.txtTemperature.setText("N/A");
                 }
 
+                if(position.getWeather().getMain() != null)
+                {
+                    if(position.getWeather().getMain().equals(Weather.CLEAR))
+                    {
+                        this.imgWeather.setImageResource(R.drawable.forest_sunny);
+                        this.homeFragLayout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.sunny));
+                    }else if(position.getWeather().getMain().equals(Weather.RAIN))
+                    {
+                        this.imgWeather.setImageResource(R.drawable.forest_rainy);
+                        this.homeFragLayout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.rainy));
+                    }else if(position.getWeather().getMain().equals(Weather.CLOUDS))
+                    {
+                        this.imgWeather.setImageResource(R.drawable.forest_cloudy);
+                        this.homeFragLayout.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.cloudy));
+                    }
+                }
+
                 if(position.getWeather().getDescription() != null)
                 {
                     this.txtDescription.setText(position.getWeather().getDescription());
@@ -151,24 +174,45 @@ public class HomeFrag extends Fragment implements WSCallsUtilsTaskCaller, Locati
                     {
                         //day one
                         this.txtDayOne.setText(day);
+                        setWeatherImage(weather.getMain(), this.imgDayOneTemp);
                         this.txtDayOneTemp.setText(weather.getMaxTemp() + "" + (char)0x00B0);
                     }else if(i == 1)
                     {
                         //day two
                         this.txtDayTwo.setText(day);
+                        setWeatherImage(weather.getMain(), this.imgDayTwoTemp);
                         this.txtDayTwoTemp.setText(weather.getMaxTemp() + "" + (char)0x00B0);
                     }else if(i == 2)
                     {
                         //day three
                         this.txtDayThree.setText(day);
+                        setWeatherImage(weather.getMain(), this.imgDayThreeTemp);
                         this.txtDayThreeTemp.setText(weather.getMaxTemp() + "" + (char)0x00B0);
                     }else if(i == 3)
                     {
                         //day four
                         this.txtDayFour.setText(day);
+                        setWeatherImage(weather.getMain(), this.imgDayFourTemp);
                         this.txtDayFourTemp.setText(weather.getMaxTemp() + "" + (char)0x00B0);
                     }
                 }
+            }
+        }
+    }
+
+    private void setWeatherImage(String weather, ImageView view)
+    {
+        if(weather != null && view != null)
+        {
+            if(weather.equals(Weather.CLEAR))
+            {
+                view.setImageResource(R.drawable.clear);
+            }else if(weather.equals(Weather.RAIN))
+            {
+                view.setImageResource(R.drawable.rain);
+            }else if(weather.equals(Weather.CLOUDS))
+            {
+                view.setImageResource(R.drawable.partlysunny);
             }
         }
     }

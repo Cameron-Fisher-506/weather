@@ -23,6 +23,14 @@ public class WSCallsUtils extends AsyncTask<String, Void, String>
         this.reqCode = reqCode;
     }
 
+    /**
+     *
+     * get is used to make GET Requests
+     *
+     * @param wsCallsUtilsTaskCaller Context which implements the callback method
+     * @param url URL request is made to
+     * @param reqCode Request code used to handled the request in the callback method
+     */
     public static void get(WSCallsUtilsTaskCaller wsCallsUtilsTaskCaller, String url, int reqCode)
     {
         try

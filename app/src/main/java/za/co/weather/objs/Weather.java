@@ -12,6 +12,11 @@ import za.co.weather.utils.LocationUtils;
 
 public class Weather
 {
+    public static final String CLOUDS = "Clouds";
+    public static final String RAIN = "Rain";
+    public static final String CLEAR = "Clear";
+
+    private String main;
     private String description;
     private String sunrise;
     private String sunset;
@@ -31,7 +36,8 @@ public class Weather
 
     }
 
-    public Weather(String description, String sunrise, String sunset, Long temp, Long minTemp, Long maxTemp, Long pressure, Long humidity, Long feelsLike, Double visibility, Double windSpeed, Long windDegrees, String date) {
+    public Weather(String main, String description, String sunrise, String sunset, Long temp, Long minTemp, Long maxTemp, Long pressure, Long humidity, Long feelsLike, Double visibility, Double windSpeed, Long windDegrees, String date) {
+        this.main = main;
         this.description = description;
         this.sunrise = sunrise;
         this.sunset = sunset;
@@ -45,6 +51,14 @@ public class Weather
         this.windSpeed = windSpeed;
         this.windDegrees = windDegrees;
         this.date = date;
+    }
+
+    public String getMain() {
+        return main;
+    }
+
+    public void setMain(String main) {
+        this.main = main;
     }
 
     public String getDescription() {
@@ -161,6 +175,7 @@ public class Weather
                 if(weathers != null && weathers.length() > 0)
                 {
                     JSONObject weather = weathers.getJSONObject(0);
+                    this.main = weather.has("main") ? weather.getString("main") : null;
                     this.description = weather.has("description") ? weather.getString("description") : null;
                 }
 
