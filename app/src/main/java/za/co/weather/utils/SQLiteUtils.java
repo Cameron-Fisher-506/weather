@@ -7,6 +7,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import za.co.weather.objs.Position;
+
 public class SQLiteUtils extends SQLiteOpenHelper
 {
     
@@ -146,6 +151,66 @@ public class SQLiteUtils extends SQLiteOpenHelper
                 dbWrite = null;
             }
         }
+    }
+
+    public List<Position> getAllFavourites()
+    {
+        List<Position> toReturn = null;
+
+        createFavouritesTable();
+
+        SQLiteDatabase dbReader = null;
+        Cursor cursor = null;
+
+        try
+        {
+            dbReader = getReadableDatabase();
+
+            if(dbReader != null)
+            {
+                String query = "SELECT *" + " FROM " + FAVOURITES_TABLE + ";";
+
+                cursor = dbReader.rawQuery(query, null, null);
+
+                if(cursor != null && cursor.getCount() > 0)
+                {
+                    toReturn = new ArrayList<Position>();
+                    while(cursor.moveToNext())
+                    {
+                        Position position = new Position();
+                        position.setCity(cursor.getString(1));
+                        position.setLatitude(cursor.getString(2));
+                        position.setLongitude(cursor.getString(3));
+
+                        toReturn.add(position);
+                    }
+                }
+            }
+        }catch(Exception e)
+        {
+            String message = "\n\nError Message: " + e.getMessage() +
+                    "\nClass: SQLiteUtils" +
+                    "\nMethod: getAllFavourites" +
+                    "\nCreatedTime: " + DTUtils.getCurrentDateTime();
+            Log.d(ConstantUtils.TAG, message);
+        }finally
+        {
+            if(dbReader != null)
+            {
+                dbReader.close();
+                dbReader = null;
+            }
+
+            if(cursor != null)
+            {
+                cursor.close();
+                cursor = null;
+            }
+        }
+
+
+        return toReturn;
+
     }
 
     public void cacheResponse(String url, String response, String createdTime)

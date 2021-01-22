@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import za.co.weather.R;
+import za.co.weather.objs.Position;
 import za.co.weather.utils.ConstantUtils;
 import za.co.weather.utils.DTUtils;
 import za.co.weather.utils.DialogUtils;
@@ -84,6 +85,11 @@ public class LocationFrag extends Fragment implements OnMapReadyCallback
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if(actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE || event.getAction() == KeyEvent.ACTION_DOWN || event.getAction() == KeyEvent.KEYCODE_ENTER)
                 {
+                    if(map != null)
+                    {
+                        map.clear();
+                    }
+
                     locate();
                 }
 
@@ -100,6 +106,12 @@ public class LocationFrag extends Fragment implements OnMapReadyCallback
                 {
                     sqLiteUtils.cacheFavourites(address.getAddressLine(0), Double.toString(address.getLatitude()), Double.toString(address.getLongitude()));
                     GeneralUtils.makeToast(getContext(),"Added to favourites");
+
+                    if(map != null)
+                    {
+                        map.clear();
+                        plotFavouriteLocations();
+                    }
                 }else
                 {
                     DialogUtils.createAlertDialog(getContext(), "Add to favorites", "Please search for an address, city or zip code to add to favourites.",false).show();
@@ -107,6 +119,32 @@ public class LocationFrag extends Fragment implements OnMapReadyCallback
             }
         });
 
+    }
+
+    private void plotFavouriteLocations()
+    {
+        List<Position> positions = sqLiteUtils.getAllFavourites();
+
+        if(positions != null && positions.size() > 0)
+        {
+            for(int i = 0; i < positions.size(); i++)
+            {
+                Position position = positions.get(i);
+
+                if(this.map != null && position.getCity() != null && position.getLatitude() != null && position.getLongitude() != null)
+                {
+                    LatLng latLng = new LatLng(Double.parseDouble(position.getLatitude()),Double.parseDouble(position.getLongitude()));
+
+                    MarkerOptions markerOptions = new MarkerOptions()
+                            .position(latLng)
+                            .title(position.getCity());
+
+                    this.marker =  this.map.addMarker(markerOptions);
+                    this.marker.showInfoWindow();
+                }
+
+            }
+        }
     }
 
     private void locate()
@@ -140,8 +178,13 @@ public class LocationFrag extends Fragment implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap)
     {
         this.map = googleMap;
-        this.map.setMapStyle(MapStyleOptions.loadRawResourceStyle(getActivity().getApplicationContext(), R.raw.map_in_night));
+        if(this.map != null)
+        {
+            this.map.setMapStyle(MapStyleOptions.loadRawResourceStyle(getActivity().getApplicationContext(), R.raw.map_in_night));
 
+            this.map.clear();
+            plotFavouriteLocations();
+        }
     }
 
     private void moveCamera(LatLng latLng, float zoom, String title)
