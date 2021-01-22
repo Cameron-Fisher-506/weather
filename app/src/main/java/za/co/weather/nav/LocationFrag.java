@@ -45,6 +45,7 @@ public class LocationFrag extends Fragment implements OnMapReadyCallback
 
     private EditText edTxtLocation;
     private ImageButton imgBtnSave;
+    private ImageButton imgBtnSearch;
 
     private Address address;
 
@@ -116,6 +117,20 @@ public class LocationFrag extends Fragment implements OnMapReadyCallback
                 {
                     DialogUtils.createAlertDialog(getContext(), "Add to favorites", "Please search for an address, city or zip code to add to favourites.",false).show();
                 }
+            }
+        });
+
+        this.imgBtnSearch = (ImageButton) view.findViewById(R.id.imgBtnSearch);
+        this.imgBtnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                if(map != null)
+                {
+                    map.clear();
+                }
+
+                locate();
             }
         });
 

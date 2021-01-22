@@ -25,7 +25,7 @@
     <style name="CommonHorizontalDivider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
-        <item name="android:background">@color/white</item>
+        <item name="android:background">@color/darkblue</item>
     </style>
 
     <style name="CommonVerticalDivider">

@@ -10,9 +10,10 @@
 
 
     //Random
-    <string name="na">N/A</string>
+    <string name="na">--</string>
     <string name="notification">Notification</string>
-    <string name="address">Enter address, City or Zip Code</string>
+    <string name="address">Address, City or Zip Code</string>
+    <string name="favourites">Favourites</string>
 
     //Days
     <string name="monday">Monday</string>

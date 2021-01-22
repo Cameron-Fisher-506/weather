@@ -134,4 +134,23 @@ public class Position
                     + "\nCreatedTime: " + DTUtils.getCurrentDateTime());
         }
     }
+
+    public JSONObject toJSON()
+    {
+        JSONObject toReturn = null;
+        try
+        {
+            toReturn = new JSONObject();
+            toReturn.put("city", this.city);
+            toReturn.put("latitude", this.latitude);
+            toReturn.put("longitude", this.longitude);
+        }catch(JSONException e)
+        {
+            Log.e(ConstantUtils.TAG, "\nError: " + e.getMessage()
+                    + "\nMethod: Position - toJSON"
+                    + "\nCreatedTime: " + DTUtils.getCurrentDateTime());
+        }
+
+        return toReturn;
+    }
 }

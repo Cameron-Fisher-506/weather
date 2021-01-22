@@ -30,18 +30,32 @@
         app:layout_constraintTop_toBottomOf="@id/notify" />
 
     <TextView
-        android:id="@+id/txtTemperature"
+        android:id="@+id/txtCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="20dp"
         android:text="@string/na"
         android:textColor="@color/white"
-        android:textSize="60dp"
+        android:textSize="35dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtTemperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/na"
+        android:textColor="@color/white"
+        android:textSize="50dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtCity" />
 
     <TextView
         android:id="@+id/txtDescription"
@@ -50,7 +64,7 @@
         android:layout_marginTop="10dp"
         android:text="@string/na"
         android:textColor="@color/white"
-        android:textSize="30dp"
+        android:textSize="35dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

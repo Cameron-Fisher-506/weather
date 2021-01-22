@@ -37,6 +37,7 @@ public class HomeFrag extends Fragment implements WSCallsUtilsTaskCaller, Locati
 
     private ImageView imgWeather;
 
+    private TextView txtCity;
     private TextView txtTemperature;
     private TextView txtDescription;
 
@@ -77,10 +78,40 @@ public class HomeFrag extends Fragment implements WSCallsUtilsTaskCaller, Locati
         View view = inflater.inflate(R.layout.frag_home, container, false);
 
         this.position = new Position();
-
-        this.locationUtilsGPS = new LocationUtils(this, LocationManager.GPS_PROVIDER);
-
         wireUI(view);
+
+        if(getArguments() != null)
+        {
+            String strPosition = getArguments().getString("position");
+            if(strPosition != null)
+            {
+                try
+                {
+                    JSONObject jsonObjectMovie = new JSONObject(strPosition);
+                    String city = jsonObjectMovie.getString("city");
+                    String latitude = jsonObjectMovie.getString("latitude");
+                    String longitude = jsonObjectMovie.getString("longitude");
+
+                    getWeatherByLatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
+
+                }catch (Exception e)
+                {
+                    String message = "\n\nError Message: " + e.getMessage() +
+                            "\nMethod: onCreateView" +
+                            "\nClass: HomeActivity" +
+                            "\nCreatedTime: " + DTUtils.getCurrentDateTime();
+                    Log.d(ConstantUtils.TAG, message);
+                }
+            }else
+            {
+                this.position = new Position();
+                this.locationUtilsGPS = new LocationUtils(this, LocationManager.GPS_PROVIDER);
+            }
+        }else
+        {
+            this.locationUtilsGPS = new LocationUtils(this, LocationManager.GPS_PROVIDER);
+        }
+
 
         return view;
     }
@@ -95,6 +126,7 @@ public class HomeFrag extends Fragment implements WSCallsUtilsTaskCaller, Locati
 
         this.imgWeather = (ImageView) view.findViewById(R.id.imgWeather);
 
+        this.txtCity = (TextView) view.findViewById(R.id.txtCity);
         this.txtTemperature = (TextView) view.findViewById(R.id.txtTemperature);
         this.txtDescription = (TextView) view.findViewById(R.id.txtDescription);
 
@@ -137,6 +169,14 @@ public class HomeFrag extends Fragment implements WSCallsUtilsTaskCaller, Locati
     {
         if(position != null)
         {
+
+            if(position.getCity() != null)
+            {
+                this.txtCity.setText(position.getCity());
+            }else
+            {
+                this.txtCity.setText("--");
+            }
             if(position.getWeather() != null)
             {
                 if(position.getWeather().getTemp() != null)
@@ -145,7 +185,7 @@ public class HomeFrag extends Fragment implements WSCallsUtilsTaskCaller, Locati
                     this.txtCurrentTemp.setText(position.getWeather().getTemp() + "" + ConstantUtils.DEGREES_SYMBOL);
                 }else
                 {
-                    this.txtTemperature.setText("N/A");
+                    this.txtTemperature.setText("--");
                 }
 
                 if(position.getWeather().getMain() != null)
@@ -173,7 +213,7 @@ public class HomeFrag extends Fragment implements WSCallsUtilsTaskCaller, Locati
                     this.txtDescription.setText(position.getWeather().getDescription());
                 }else
                 {
-                    this.txtDescription.setText("N/A");
+                    this.txtDescription.setText("--");
                 }
 
                 if(position.getWeather().getMinTemp() != null)
@@ -181,7 +221,7 @@ public class HomeFrag extends Fragment implements WSCallsUtilsTaskCaller, Locati
                     this.txtMinTemp.setText(position.getWeather().getMinTemp() + "" + ConstantUtils.DEGREES_SYMBOL);
                 }else
                 {
-                    this.txtMinTemp.setText("N/A");
+                    this.txtMinTemp.setText("--");
                 }
 
                 if(position.getWeather().getMaxTemp() != null)
@@ -189,7 +229,7 @@ public class HomeFrag extends Fragment implements WSCallsUtilsTaskCaller, Locati
                     this.txtMaxTemp.setText(position.getWeather().getMaxTemp() + "" + ConstantUtils.DEGREES_SYMBOL);
                 }else
                 {
-                    this.txtMaxTemp.setText("N/A");
+                    this.txtMaxTemp.setText("--");
                 }
 
             }
