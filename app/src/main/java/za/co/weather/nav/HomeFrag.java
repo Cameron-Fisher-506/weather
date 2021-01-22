@@ -1,5 +1,6 @@
 package za.co.weather.nav;
 
+import android.Manifest;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
@@ -18,10 +19,13 @@ import androidx.fragment.app.Fragment;
 import org.json.JSONException;
 import org.json.JSONObject;
 import za.co.weather.R;
+import za.co.weather.dialogs.PermissionCallback;
 import za.co.weather.objs.Position;
 import za.co.weather.objs.Weather;
 import za.co.weather.utils.ConstantUtils;
 import za.co.weather.utils.DTUtils;
+import za.co.weather.utils.DialogUtils;
+import za.co.weather.utils.GeneralUtils;
 import za.co.weather.utils.LocationUtils;
 import za.co.weather.utils.LocationUtilsCaller;
 import za.co.weather.utils.StringUtils;
@@ -79,6 +83,19 @@ public class HomeFrag extends Fragment implements WSCallsUtilsTaskCaller, Locati
 
         this.position = new Position();
         wireUI(view);
+
+        if(!GeneralUtils.checkPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION))
+        {
+            DialogUtils.createAlertPermission(getContext(), "Location Permission", "Do you want to enable location permission for Weather?", true, new PermissionCallback() {
+                @Override
+                public void checkPermission(boolean ischeckPermission) {
+                    if(ischeckPermission)
+                    {
+                        GeneralUtils.openAppSettingsScreen(getContext());
+                    }
+                }
+            }).show();
+        }
 
         if(getArguments() != null)
         {
