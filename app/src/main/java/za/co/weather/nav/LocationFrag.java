@@ -4,15 +4,18 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -29,6 +32,10 @@ import java.util.ArrayList;
 import java.util.List;
 import za.co.weather.R;
 import za.co.weather.utils.ConstantUtils;
+import za.co.weather.utils.DTUtils;
+import za.co.weather.utils.DialogUtils;
+import za.co.weather.utils.GeneralUtils;
+import za.co.weather.utils.SQLiteUtils;
 
 public class LocationFrag extends Fragment implements OnMapReadyCallback
 {
@@ -36,11 +43,18 @@ public class LocationFrag extends Fragment implements OnMapReadyCallback
     private Marker marker;
 
     private EditText edTxtLocation;
+    private ImageButton imgBtnSave;
+
+    private Address address;
+
+    private SQLiteUtils sqLiteUtils;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_location, container, false);
+
+        this.sqLiteUtils = new SQLiteUtils(getContext());
 
         Places.initialize(getContext(), ConstantUtils.GOOGLE_API_KEY);
 
@@ -77,6 +91,22 @@ public class LocationFrag extends Fragment implements OnMapReadyCallback
             }
         });
 
+        this.imgBtnSave = (ImageButton) view.findViewById(R.id.imgBtnSave);
+        this.imgBtnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                if(address != null)
+                {
+                    sqLiteUtils.cacheFavourites(address.getAddressLine(0), Double.toString(address.getLatitude()), Double.toString(address.getLongitude()));
+                    GeneralUtils.makeToast(getContext(),"Added to favourites");
+                }else
+                {
+                    DialogUtils.createAlertDialog(getContext(), "Add to favorites", "Please search for an address, city or zip code to add to favourites.",false).show();
+                }
+            }
+        });
+
     }
 
     private void locate()
@@ -84,13 +114,13 @@ public class LocationFrag extends Fragment implements OnMapReadyCallback
         String searchString = edTxtLocation.getText().toString();
 
         Geocoder geocoder = new Geocoder(getContext());
-        List<Address> addresses = new ArrayList<Address>();
+        List<Address> addresses = null;
 
         try {
             addresses = geocoder.getFromLocationName(searchString, 1);
             if(addresses != null && addresses.size() > 0)
             {
-                Address address = addresses.get(0);
+                this.address = addresses.get(0);
 
                 if(address != null)
                 {
@@ -100,7 +130,9 @@ public class LocationFrag extends Fragment implements OnMapReadyCallback
             }
         }catch(IOException e)
         {
-
+            Log.e(ConstantUtils.TAG, "\nError: " + e.getMessage()
+                    + "\nMethod: LocationFrag - locate"
+                    + "\nCreatedTime: " + DTUtils.getCurrentDateTime());
         }
     }
 

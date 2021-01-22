@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements WSCallsUtilsTaskC
                 setNavIcons(false, true, false);
 
                 LocationFrag locationFrag = new LocationFrag();
-                FragmentUtils.startFragment(getSupportFragmentManager(), locationFrag, R.id.fragContainer, getSupportActionBar(), "Saved Locations", true, false, true, null);
+                FragmentUtils.startFragment(getSupportFragmentManager(), locationFrag, R.id.fragContainer, getSupportActionBar(), "Add to favourites", true, false, true, null);
             }
         });
     }

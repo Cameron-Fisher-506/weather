@@ -123,6 +123,16 @@ public class HomeFrag extends Fragment implements WSCallsUtilsTaskCaller, Locati
         this.txtDayFiveTemp = (TextView) view.findViewById(R.id.txtDayFiveTemp);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        if(this.locationUtilsGPS != null)
+        {
+            this.locationUtilsGPS.stopLocationUpdates();
+        }
+    }
+
     private void displayUI(Position position)
     {
         if(position != null)

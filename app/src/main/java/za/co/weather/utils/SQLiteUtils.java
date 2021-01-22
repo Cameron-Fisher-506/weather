@@ -15,6 +15,7 @@ public class SQLiteUtils extends SQLiteOpenHelper
     
     //TABLES
     private static final String RESPONSE_TABLE = "response";
+    private static final String FAVOURITES_TABLE = "favourites";
     
     public SQLiteUtils(Context context)
     {
@@ -59,7 +60,7 @@ public class SQLiteUtils extends SQLiteOpenHelper
         {
             String message = "\n\nError Message: " + e.getMessage() +
                                      "\nClass: SQLiteUtils" +
-                                     "\nMethod: dropResponseTable" +
+                                     "\nMethod: createResponseTable" +
                                      "\nCreatedTime: " + DTUtils.getCurrentDateTime();
             Log.d(ConstantUtils.TAG, message);
         }finally
@@ -71,27 +72,33 @@ public class SQLiteUtils extends SQLiteOpenHelper
             }
         }
     }
-    
-    public void dropResponseTable()
+
+    private void createFavouritesTable()
     {
-        String request = "DROP TABLE IF EXISTS " + RESPONSE_TABLE + ";";
-        
         SQLiteDatabase dbWrite = null;
-        
+
         try
         {
+            String request = "CREATE TABLE IF NOT EXISTS " +FAVOURITES_TABLE+"(" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "address VARCHAR(1000)," +
+                    "latitude VARCHAR(100)," +
+                    "longitude VARCHAR(100)" +
+                    ")";
+
             dbWrite = getWritableDatabase();
+
             if(dbWrite != null)
             {
                 dbWrite.execSQL(request);
             }
-            
+
         }catch(Exception e)
         {
             String message = "\n\nError Message: " + e.getMessage() +
-                                     "\nClass: SQLiteUtils" +
-                                     "\nMethod: dropRequestTable" +
-                                     "\nCreatedTime: " + DTUtils.getCurrentDateTime();
+                    "\nClass: SQLiteUtils" +
+                    "\nMethod: createFavouritesTable" +
+                    "\nCreatedTime: " + DTUtils.getCurrentDateTime();
             Log.d(ConstantUtils.TAG, message);
         }finally
         {
@@ -102,7 +109,45 @@ public class SQLiteUtils extends SQLiteOpenHelper
             }
         }
     }
-    
+
+    public void cacheFavourites(String address, String latitude, String longitude)
+    {
+        createFavouritesTable();
+
+        SQLiteDatabase dbWrite = null;
+        try
+        {
+            dbWrite = this.getWritableDatabase();
+
+            if(dbWrite != null && address != null && latitude != null && longitude != null)
+            {
+                ContentValues contentValues = new ContentValues();
+
+                contentValues.put("address", address);
+                contentValues.put("latitude", latitude);
+                contentValues.put("longitude", longitude);
+
+                dbWrite.insert(FAVOURITES_TABLE, null,contentValues);
+            }
+
+        }catch(Exception e)
+        {
+            String message = "\n\nError Message: " + e.getMessage() +
+                    "\nClass: SQLiteUtils" +
+                    "\nMethod: cacheFavourites" +
+                    "\nCreatedTime: " + DTUtils.getCurrentDateTime();
+            Log.d(ConstantUtils.TAG, message);
+        }finally
+        {
+
+            if(dbWrite != null)
+            {
+                dbWrite.close();
+                dbWrite = null;
+            }
+        }
+    }
+
     public void cacheResponse(String url, String response, String createdTime)
     {
         createResponseTable();
