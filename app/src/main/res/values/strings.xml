@@ -11,7 +11,8 @@
 
     //Random
     <string name="na">N/A</string>
-    <string name="notification">notification</string>
+    <string name="notification">Notification</string>
+    <string name="address">Enter address, City or Zip Code</string>
 
     //Days
     <string name="monday">Monday</string>

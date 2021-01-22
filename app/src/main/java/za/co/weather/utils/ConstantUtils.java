@@ -17,6 +17,7 @@ public class ConstantUtils
 
     //API KEYS
     public static final String WEATHER_API_KEY = "c185295ac9b48092cb9fd6b331a5c881";
+    public static final String GOOGLE_API_KEY = "AIzaSyDeS-jtsR99O03K0-BqNO9qRU9NaIcL9O4";
 
     //Weather
     public static final int FORECAST_DAYS = 5;

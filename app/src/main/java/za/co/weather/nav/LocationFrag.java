@@ -1,14 +1,16 @@
 package za.co.weather.nav;
 
-import android.content.Context;
-import android.location.Location;
-import android.location.LocationListener;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -21,25 +23,26 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import za.co.weather.MainActivity;
+import com.google.android.libraries.places.api.Places;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import za.co.weather.R;
 import za.co.weather.utils.ConstantUtils;
-import za.co.weather.utils.DTUtils;
-import za.co.weather.utils.LocationUtils;
 
-
-public class LocationFrag extends Fragment implements OnMapReadyCallback, LocationListener
+public class LocationFrag extends Fragment implements OnMapReadyCallback
 {
     private GoogleMap map;
     private Marker marker;
-    private LocationManager locationManager;
+
+    private EditText edTxtLocation;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_location, container, false);
 
-        setLocationManager();
+        Places.initialize(getContext(), ConstantUtils.GOOGLE_API_KEY);
 
         wireUI(view);
 
@@ -51,12 +54,6 @@ public class LocationFrag extends Fragment implements OnMapReadyCallback, Locati
     {
         super.onDestroyView();
 
-        if(this.locationManager != null)
-        {
-            this.locationManager.removeUpdates(this);
-            this.locationManager = null;
-        }
-
     }
 
     private void wireUI(View view)
@@ -67,23 +64,43 @@ public class LocationFrag extends Fragment implements OnMapReadyCallback, Locati
             mapFragment.getMapAsync(this);
         }
 
+        this.edTxtLocation = (EditText) view.findViewById(R.id.edtxtLocation);
+        this.edTxtLocation.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE || event.getAction() == KeyEvent.ACTION_DOWN || event.getAction() == KeyEvent.KEYCODE_ENTER)
+                {
+                    locate();
+                }
+
+                return false;
+            }
+        });
+
     }
 
-    private void setLocationManager()
+    private void locate()
     {
-        try
-        {
-            locationManager = (LocationManager) ((MainActivity)getActivity()).getSystemService(Context.LOCATION_SERVICE);
-            if(locationManager != null)
-            {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 5,this);
-            }
+        String searchString = edTxtLocation.getText().toString();
 
-        } catch (SecurityException e)
+        Geocoder geocoder = new Geocoder(getContext());
+        List<Address> addresses = new ArrayList<Address>();
+
+        try {
+            addresses = geocoder.getFromLocationName(searchString, 1);
+            if(addresses != null && addresses.size() > 0)
+            {
+                Address address = addresses.get(0);
+
+                if(address != null)
+                {
+                    moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), 10, address.getAddressLine(0));
+                }
+
+            }
+        }catch(IOException e)
         {
-            Log.e(ConstantUtils.TAG, "Error: " + e.getMessage() +
-                    "\nMethod: LocationUtils - startLocationManager" +
-                    "\nCreatedTime: " + DTUtils.getCurrentDateTime());
+
         }
     }
 
@@ -95,54 +112,29 @@ public class LocationFrag extends Fragment implements OnMapReadyCallback, Locati
 
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
-        if(this.map != null && location != null)
+    private void moveCamera(LatLng latLng, float zoom, String title)
+    {
+        if(this.map != null && latLng != null)
         {
-            LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
-            MarkerOptions markerOptions = new MarkerOptions()
-                    .position(myLocation)
-                    .title("Me")
-                    .snippet(LocationUtils.getAddress(getContext(), myLocation));
-
-
-            if(this.marker == null)
-            {
-                this.marker = this.map.addMarker(markerOptions);
-            }else
-            {
-                marker.setPosition(myLocation);
-            }
-
-            this.marker.showInfoWindow();
-
             CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(myLocation)      // Sets the center of the map to location user
-                    .zoom(17)                   // Sets the zoom
+                    .target(latLng)      // Sets the center of the map to location user
+                    .zoom(zoom)                   // Sets the zoom
                     .bearing(90)                // Sets the orientation of the camera to east
                     .tilt(40)                   // Sets the tilt of the camera to 30 degrees
                     .build();                   // Creates a CameraPosition from the builder
             map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
+            MarkerOptions markerOptions = new MarkerOptions()
+                    .position(latLng)
+                    .title(title);
+
+            this.marker =  this.map.addMarker(markerOptions);
+            this.marker.showInfoWindow();
 
 
         }
 
     }
 
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
 
 }
