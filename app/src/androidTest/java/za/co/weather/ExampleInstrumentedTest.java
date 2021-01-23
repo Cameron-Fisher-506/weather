@@ -24,4 +24,5 @@ public class ExampleInstrumentedTest {
 
         assertEquals("za.co.weather", appContext.getPackageName());
     }
+
 }
