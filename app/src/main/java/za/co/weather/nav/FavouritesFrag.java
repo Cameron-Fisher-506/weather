@@ -75,7 +75,7 @@ public class FavouritesFrag extends Fragment
                     HomeFrag homeFrag = new HomeFrag();
                     homeFrag.setArguments(bundle);
 
-                    FragmentUtils.startFragment(((MainActivity)getActivity()).getSupportFragmentManager(), homeFrag, R.id.fragContainer, ((MainActivity)getActivity()).getSupportActionBar(), "Home", true, false, true, null);
+                    FragmentUtils.startFragment(((MainActivity)getActivity()).getSupportFragmentManager(), homeFrag, R.id.fragContainer, ((MainActivity)getActivity()).getSupportActionBar(), position.getCity(), true, false, true, null);
                 }else
                 {
                     GeneralUtils.makeToast(getContext(), "Favourite location not available!");

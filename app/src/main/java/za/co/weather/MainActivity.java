@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements WSCallsUtilsTaskC
     private final String TAG = "MainActivity";
 
     private ImageButton btnHome;
-    private ImageButton btnLocations;
+    private ImageButton btnAddFavourites;
     private ImageButton btnMenu;
 
     @Override
@@ -156,8 +156,8 @@ public class MainActivity extends AppCompatActivity implements WSCallsUtilsTaskC
 
     private void addBtnLocationsListener()
     {
-        this.btnLocations = (ImageButton) findViewById(R.id.btnLocations);
-        this.btnLocations.setOnClickListener(new View.OnClickListener() {
+        this.btnAddFavourites = (ImageButton) findViewById(R.id.btnAddFavourites);
+        this.btnAddFavourites.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setNavIcons(false, true, false);
@@ -181,10 +181,10 @@ public class MainActivity extends AppCompatActivity implements WSCallsUtilsTaskC
 
         if(locations)
         {
-            this.btnLocations.setBackgroundResource(R.drawable.ic_place_blue_24dp);
+            this.btnAddFavourites.setBackgroundResource(R.drawable.ic_favorite_blue_24dp);
         }else
         {
-            this.btnLocations.setBackgroundResource(R.drawable.ic_place_white_24dp);
+            this.btnAddFavourites.setBackgroundResource(R.drawable.ic_favorite_white_24dp);
         }
 
         if(menu)

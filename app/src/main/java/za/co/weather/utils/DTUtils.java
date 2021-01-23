@@ -87,6 +87,22 @@ public class DTUtils
         return toReturn;
     }
 
+    public static String getDateTimeFromDecimal(Long decimalDate)
+    {
+        String toReturn = "";
+
+        SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date now = new Date(decimalDate * 1000);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(now);
+        calendar.add(Calendar.HOUR_OF_DAY,2); // this will add two hours
+        now = calendar.getTime();
+        toReturn = sdfDate.format(now);
+
+        return toReturn;
+    }
+
     public static String getDateFromDecimal(Long decimalDate)
     {
         String toReturn = "";

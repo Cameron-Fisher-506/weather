@@ -30,13 +30,14 @@ public class Weather
     private Double windSpeed;
     private Long windDegrees;
     private String date;
+    private String timestamp;
 
     public Weather()
     {
 
     }
 
-    public Weather(String main, String description, String sunrise, String sunset, Long temp, Long minTemp, Long maxTemp, Long pressure, Long humidity, Long feelsLike, Double visibility, Double windSpeed, Long windDegrees, String date) {
+    public Weather(String main, String description, String sunrise, String sunset, Long temp, Long minTemp, Long maxTemp, Long pressure, Long humidity, Long feelsLike, Double visibility, Double windSpeed, Long windDegrees, String date, String timestamp) {
         this.main = main;
         this.description = description;
         this.sunrise = sunrise;
@@ -51,6 +52,7 @@ public class Weather
         this.windSpeed = windSpeed;
         this.windDegrees = windDegrees;
         this.date = date;
+        this.timestamp = timestamp;
     }
 
     public String getMain() {
@@ -165,6 +167,14 @@ public class Weather
         this.date = date;
     }
 
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
+
     public void populate(JSONObject jsonObject)
     {
         try
@@ -202,6 +212,7 @@ public class Weather
 
             this.visibility = jsonObject.has("visibility") ? LocationUtils.meterToKilometer(jsonObject.getLong("visibility")) : null;
             this.date = jsonObject.has("dt") ? DTUtils.getDateFromDecimal(jsonObject.getLong("dt")) : null;
+            this.timestamp = jsonObject.has("dt") ? DTUtils.getDateTimeFromDecimal(jsonObject.getLong("dt")) : null;
 
             if(jsonObject.has("wind"))
             {

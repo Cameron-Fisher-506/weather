@@ -21,7 +21,7 @@
     <ImageView
         android:id="@+id/imgWeather"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="290dp"
         android:scaleType="centerCrop"
         android:src="@drawable/forest_sunny"
         app:layout_constraintEnd_toEndOf="parent"

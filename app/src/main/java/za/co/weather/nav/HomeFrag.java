@@ -182,7 +182,7 @@ public class HomeFrag extends Fragment implements WSCallsUtilsTaskCaller, Locati
         }
     }
 
-    private void displayUI(Position position)
+    private void displayUI(Position position, boolean isOffline)
     {
         if(position != null)
         {
@@ -196,6 +196,21 @@ public class HomeFrag extends Fragment implements WSCallsUtilsTaskCaller, Locati
             }
             if(position.getWeather() != null)
             {
+                if(isOffline)
+                {
+                    if(position.getWeather().getTimestamp() != null)
+                    {
+                        this.txtNotify.setText("No connection: " + this.position.getWeather().getTimestamp());
+                    }else
+                    {
+                        this.txtNotify.setText("No connection");
+                    }
+                    this.txtNotify.setVisibility(View.VISIBLE);
+                }else
+                {
+                    this.txtNotify.setVisibility(View.GONE);
+                }
+
                 if(position.getWeather().getTemp() != null)
                 {
                     this.txtTemperature.setText(position.getWeather().getTemp() + "" + ConstantUtils.DEGREES_SYMBOL);
@@ -327,7 +342,7 @@ public class HomeFrag extends Fragment implements WSCallsUtilsTaskCaller, Locati
     {
         if(isOffline)
         {
-            this.txtNotify.setText("You are currently in cache mode.");
+            this.txtNotify.setText("No connection");
             this.txtNotify.setVisibility(View.VISIBLE);
         }else
         {
@@ -343,7 +358,7 @@ public class HomeFrag extends Fragment implements WSCallsUtilsTaskCaller, Locati
 
                     this.position.populate(jsonObject);
 
-                    displayUI(this.position);
+                    displayUI(this.position, isOffline);
 
                 }catch(JSONException e)
                 {
@@ -360,7 +375,7 @@ public class HomeFrag extends Fragment implements WSCallsUtilsTaskCaller, Locati
 
                     this.position.populateForcast(jsonObject);
 
-                    displayUI(this.position);
+                    displayUI(this.position, isOffline);
 
                 }catch(JSONException e)
                 {
